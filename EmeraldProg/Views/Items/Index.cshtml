@@ -23,8 +23,8 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                SerialNo
+            <th>              
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">SerialNo</a>
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">ItemName</a>

@@ -25,7 +25,7 @@ namespace EmeraldProg.Controllers
         //    return View(await emeraldContext.ToListAsync());
         //}
 
-        public async Task<IActionResult> Index(string sortOrder,string currentFilter,string searchString, int? pageNumber)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -43,16 +43,19 @@ namespace EmeraldProg.Controllers
             ViewData["CurrentFilter"] = searchString;
 
             var items = from s in _context.Items
-                           select s;
+                        select s;
             if (!String.IsNullOrEmpty(searchString))
             {
                 items = items.Where(s => s.ItemName.Contains(searchString)
-                                       || s.Vendor.Contains(searchString));
+                                       || s.Vendor.Contains(searchString)
+                                       || s.Category.CategoryName.Contains(searchString)
+                                       || s.Location.LocationName.Contains(searchString)
+                                       );
             }
             switch (sortOrder)
             {
                 case "name_desc":
-                    items = items.OrderByDescending(s => s.ItemName);
+                    items = items.OrderByDescending(s => s.ItemName).OrderByDescending(s=>s.SerialNo);
                     break;
                 case "Date":
                     items = items.OrderBy(s => s.RunDate);
@@ -97,6 +100,10 @@ namespace EmeraldProg.Controllers
             ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryName");
             ViewData["ItemTypeID"] = new SelectList(_context.ItemTypes, "ItemTypeID", "ItemTypeName");
             ViewData["LocationID"] = new SelectList(_context.Locations, "LocationID", "LocationName");
+            var lastserialno = _context.Items.Max(item => item.SerialNo);
+            ViewData["SerialNo"] =(Convert.ToInt32(lastserialno) + 1).ToString("D3");
+
+
             return View();
         }
 
