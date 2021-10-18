@@ -1,2 +1,2 @@
 # EmeraldProg
-Asset Tracking web app for small areas using .net core 3.1 
+Asset Tracking web app for small areas using .NET 5.0
